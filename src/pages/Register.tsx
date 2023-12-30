@@ -1,4 +1,5 @@
 
+import {useNavigate} from 'react-router-dom';
 
 export default function Login(){
 
@@ -6,10 +7,12 @@ export default function Login(){
 
     }
 
+    const navigate = useNavigate();
+
     return (
         <div className="register-body">
             <div className="close-button">
-
+            <i className="fa-solid fa-xmark"></i>
             </div>
 
             <div className="form-container">
@@ -21,7 +24,8 @@ export default function Login(){
                     
                     <input type="submit" value="Submit" />
                 </form>
-                <span>Already registered? Sign in</span>
+
+                <span>Already registered? <button onClick={() => navigate("/login")}>Sign in</button></span>
             </div>
         </div>
     );

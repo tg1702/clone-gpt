@@ -1,15 +1,17 @@
-
+import {useNavigate} from 'react-router-dom';
 
 export default function Login(){
 
-    const handleLoginSubmit = () => {
+    const navigate = useNavigate();
 
+    const handleLoginSubmit = () => {
+        navigate("/chat");
     }
 
     return (
         <div className="login-body">
             <div className="close-button">
-
+                <i className="fa-solid fa-xmark"></i>
             </div>
 
             <div className="form-container">
@@ -21,7 +23,7 @@ export default function Login(){
                     
                     <input type="submit" value="Submit" />
                 </form>
-                <span>Don't have an account? Register</span>
+                <span>Don't have an account? <button onClick={() => navigate("/register")}>Register</button></span>
             </div>
         </div>
     );

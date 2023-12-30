@@ -36,8 +36,8 @@ export default function Chat(){
                 </div>
 
 
-            {messages.map((msg) => {
-              return <div className="chatbox">
+            {messages.map((msg, id) => {
+              return <div className="chatbox" key={id}>
                 <div className="sender-name">
                     {msg.sender}
                 </div>
@@ -53,7 +53,13 @@ export default function Chat(){
             <div className="message-input">
                 <form onSubmit={sendToServer}>
                     <input type="text" name="message-box" id="" placeholder="Message Clone GPT" />
-                    <input type="submit" value="icon" />
+
+                    <div className="submit-container">
+                    <input type="submit"
+                    />
+                    {<i className="fa-regular fa-circle-up"></i>} 
+                    </div>
+                    
                 </form>
             </div>
 
@@ -72,8 +78,8 @@ export default function Chat(){
                 </button>
 
                 <div className="chat-list">
-                    {chats.map((chat) =>{
-                        return <div className="chat-title">
+                    {chats.map((chat, id) =>{
+                        return <div className="chat-title" key={id}>
                             {chat.title}
                         </div>;
                     })}
