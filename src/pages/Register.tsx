@@ -3,20 +3,24 @@ import {useNavigate} from 'react-router-dom';
 
 export default function Login(){
 
-    const handleRegisterSubmit = () => {
-
-    }
-
     const navigate = useNavigate();
 
+    const handleRegisterSubmit = () => {
+        navigate("/chat");
+    }
+
+    const navigateClose = () => {
+        navigate("/");
+    }
+
     return (
-        <div className="register-body">
+        <div className="login-body">
             <div className="close-button">
-            <i className="fa-solid fa-xmark"></i>
+            <i className="fa-solid fa-xmark" onClick={navigateClose}></i>
             </div>
 
             <div className="form-container">
-
+                <h1>Register</h1>
                 <form onSubmit={handleRegisterSubmit}>
                     <input type="text" name="name" placeholder="Name"></input>
                     <input type="email" name="email" placeholder="Email"></input>

@@ -2,7 +2,7 @@ import Login from './Login'
 import Register from './Register'
 import Chat from './Chat'
 import Home from './Home'
-import {Routes, Route, Link} from 'react-router-dom';
+import {Routes, Route} from 'react-router-dom';
 
 function App() {
 
@@ -10,7 +10,6 @@ function App() {
 
   return (
     <>   
-
       <Routes>
         <Route element={ <Register />} path="/register">
         </Route>

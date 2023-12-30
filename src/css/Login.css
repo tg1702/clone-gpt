@@ -1,0 +1,49 @@
+.login-body{
+    display: flex;
+    flex-direction: column;
+    height: 95vh;
+}
+
+.close-button{
+    display: flex;
+    justify-content: flex-end;
+    margin: 1rem;
+    height: 10vh;
+    cursor: pointer;
+}
+
+.fa-solid {
+    font-size: 32px;
+}
+
+.form-container{
+    display: flex;
+    flex-direction: column;
+    height: 85vh;
+    justify-content: center;
+    align-items: center;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+form input{
+    width: 300px;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+}
+
+h1{
+    margin-bottom: 1rem;
+}
+
+form input[type="submit"]{
+    width: 100px;
+    border: none;
+    cursor: pointer;
+}

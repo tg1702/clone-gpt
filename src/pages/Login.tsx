@@ -1,4 +1,5 @@
 import {useNavigate} from 'react-router-dom';
+import '../css/Login.css'
 
 export default function Login(){
 
@@ -8,14 +9,18 @@ export default function Login(){
         navigate("/chat");
     }
 
+    const navigateClose = () => {
+        navigate("/");
+    }
+
     return (
         <div className="login-body">
             <div className="close-button">
-                <i className="fa-solid fa-xmark"></i>
+                <i className="fa-solid fa-xmark" onClick={navigateClose}></i>
             </div>
 
             <div className="form-container">
-
+                <h1>Login</h1>
                 <form onSubmit={handleLoginSubmit}>
                     <input type="text" name="name" placeholder="Name"></input>
                     <input type="email" name="email" placeholder="Email"></input>

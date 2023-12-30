@@ -1,4 +1,4 @@
-
+import '../css/Chat.css'
 
 
 export default function Chat(){

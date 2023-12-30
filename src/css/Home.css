@@ -1,0 +1,97 @@
+
+.main-body{
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid black;
+    height: 10vh;
+    
+}
+
+.nav-header button{
+    margin-right: 1rem;
+}
+
+.appName{
+    font-size: 32px;
+}
+
+.home{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+
+    background-image: url('../assets/main-background.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-bottom: 3rem;
+}
+
+.home-text{
+    color: white;
+    padding-bottom: 0.5rem;
+}
+.what-is
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: aliceblue;
+    border-radius: 20px;
+    padding: 1rem;
+}
+
+.description-container{
+    display: flex;
+    flex-direction: row;
+    width: 60%;
+}
+
+.description-text{
+    flex: 1;
+    font-size: 20px;
+    padding-right: 5rem;
+    
+}
+
+.description-image{
+    flex: 1;
+    
+}
+
+img{
+    height: 400px;
+    width: 400px;
+}
+
+.about{
+    height: 80vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.about-name{
+    padding-right: 2rem;
+    border-right: 1px solid black;
+    margin-right: 2rem;
+}
+
+.about-text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

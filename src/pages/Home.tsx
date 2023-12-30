@@ -1,3 +1,4 @@
+import '../css/Home.css';
 import {Link} from 'react-router-dom';
 
 export default function Home () {
@@ -8,11 +9,11 @@ export default function Home () {
     
     return (
         <>
-            <div className="main-body">
-        <div className="header">
-        <span className="appName">
+    <div className="main-body">
+        <div className="nav-header">
+        <h1 className="appName">
           Clone GPT
-        </span>
+        </h1>
 
         <div className="buttons">
           <button>
@@ -30,14 +31,14 @@ export default function Home () {
 
         <div className="main-content">
           <div className="home">
-            <span className="home-text">The Future of AI is here</span>
+            <h2 className="home-text">The Future of AI is here</h2>
             <button onClick={navigateToChat}>
              <Link to="/register">Start Here</Link> 
             </button>
           </div>
         </div>
         <div className='what-is'>
-          <span className="what-is header">What is Clone GPT?</span>
+          <h3 className="what-is header">What is Clone GPT?</h3>
           <hr className="horizontal-divider"></hr>
 
           <div className="description-container">
@@ -46,7 +47,7 @@ export default function Home () {
             Clone GPT is an (almost) identical replica of OpenAI's Chat GPT. Clone GPT was built uusing the MERN stack along with the OpenAI API to generate responses from the GPT-3.5 model
           </div>
           <div className="description-image">
-            <img src="./src/assets/description-img.jpg" height='100px' width='100px' >
+            <img src="./src/assets/description-img.jpg" >
             </img>
           </div>
 
@@ -55,7 +56,10 @@ export default function Home () {
         </div>
 
         <div className="about">
-          <span className="about-name">About</span>
+            <div className="about-name">
+                <h2>About</h2>
+            </div>
+          
 
           <div className="about-text">
             <span>
