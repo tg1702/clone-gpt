@@ -12,7 +12,7 @@
     cursor: pointer;
 }
 
-.fa-solid {
+.login-body .fa-solid {
     font-size: 32px;
 }
 
@@ -24,14 +24,14 @@
     align-items: center;
 }
 
-form{
+.form-container form{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-form input{
+.form-container form input{
     width: 300px;
     padding: 0.5rem;
     border-radius: 1rem;
@@ -42,7 +42,7 @@ h1{
     margin-bottom: 1rem;
 }
 
-form input[type="submit"]{
+.form-container form input[type="submit"]{
     width: 100px;
     border: none;
     cursor: pointer;
