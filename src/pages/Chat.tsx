@@ -1,18 +1,44 @@
 import '../css/Chat.css'
+import { useState, useEffect } from 'react';
 
 
 export default function Chat(){
 
-    const username = "Thelema Grannum";
+    const [sidebarState, setSidebarState] = useState('flex');
+    const [popupState, setPopupState] = useState('none');
 
-    const messages = [
+    const [messages, setMessages] = useState( [
         {sender: "You", content: "Hello"},
 
         {sender: "Clone GPT",
         content: "Hello Back"
         }
-    ]
+    ]);
 
+    const username = "Thelema Grannum";
+
+    
+
+    useEffect(() => {
+
+        /*
+        fetch("api/users/")
+        .then((response) => response.json())
+        .then((data) => setMessages(data));
+
+        */
+
+            document.addEventListener("click", () => {
+                setTimeout(closePopup, 3000);
+            });
+        
+       
+    }, [popupState]);
+
+    function closePopup(){
+        setPopupState('none');
+    }
+    
     const chats = [
         {
             title: "How to make an omlet",
@@ -20,17 +46,27 @@ export default function Chat(){
         }
     ]
 
-    const sendToServer = () => {
+    async function sendToServer(event: any){
+        event.preventDefault();
 
+        setMessages([...messages, {sender: "You", content: event.target[0].value}]);
+        
     }
-
     const createChat = () => {
 
     }
 
-    const closeSidebar = () => {
-
+    const openSidebar = () =>{
+        setSidebarState('flex')
     }
+    const closeSidebar = () => {
+        setSidebarState('none');  
+    }
+
+    const showPopup = () => {
+        setPopupState('block');
+    }
+
     return (
         <>
             <div className="chat-body">
@@ -38,57 +74,71 @@ export default function Chat(){
 
                 <div className="chat-header">
                   
-                  <span className="username">
+                  <div className="hamburger">
+                  <i className="fa-solid fa-bars" onClick={openSidebar} style={{'display': `${sidebarState == 'flex' ?'none' : 'block'}`}}></i>
+
+                  <div className="sidebar-title">
+                    <h3>Clone GPT</h3>
+                </div>
+                  </div>
+
+                  <div className="user-info">
+                    <span className="username">
                   {username}
-                  </span>
-                  <i className="fa-solid fa-caret-down"></i>
-                    
+                    </span>
+                    <i className="fa-solid fa-caret-down" onClick={showPopup}></i>
+                  </div>
+                  
+                    <div className="popup" style={{'display': `${popupState}`}}>
+                        <span >Sign out</span>
+                    </div>
 
                  
                 </div>
 
                
             <div className="chat-messages">
-            {messages.map((msg, id) => {
-              return <div className="chatbox" key={id}>
-                <div className="sender-name">
-                    {msg.sender}
-                </div>
-                <div className="sender-body">
-                    {msg.content}
-                </div>
-                <hr></hr>
-              </div>
-              ; 
-            })
+            {
+            
+                messages.map((msg, id) => {
+                    return <div className="chatbox" key={id}>
+                      <div className="sender-name">
+                          {msg.sender}
+                      </div>
+                      <div className="sender-body">
+                          {msg.content}
+                      </div>
+                      <hr></hr>
+                    </div>
+                    ; 
+                  })
+            
+            
             }
             </div>
            
 
             <div className="message-input">
-                <form onSubmit={sendToServer}>
-                    <input type="text" name="message-box" id="" placeholder="Message Clone GPT" />
+                <form onSubmit={sendToServer} id="message-input-form">
+                    <textarea name="message-box" form="message-input-form" placeholder="Message Clone GPT"/>
 
-                    
-                    
+                    <button type="submit"><i className="fa-regular fa-circle-up"></i></button>
                 </form>
+                
                 <div>
-                <i className="fa-regular fa-circle-up"></i> 
+                 
                 </div>
                
                 </div>
             </div>
             
                 
-            <div className="sidebar">
+            <div className="sidebar" style={{'display': `${sidebarState}`}}>
 
                 <div className="sidebar-header">
-                <div className="sidebar-title">
-                    <h3>Clone GPT</h3>
-                </div>
+                
 
                 <div className="close">
-                
                     <i className="fa-solid fa-xmark" onClick={closeSidebar}></i>
                 </div>
                 
@@ -105,9 +155,13 @@ export default function Chat(){
                 </button>
 
                 <div className="chat-list">
+                    <h3>Previous chats</h3>
                     {chats.map((chat, id) =>{
                         return <div className="chat-title" key={id}>
-                            {chat.title}
+                            <button>
+                                {chat.title}
+                            </button>
+                            
                         </div>;
                     })}
                 </div>
