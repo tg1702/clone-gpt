@@ -1,8 +1,10 @@
 import '../css/Chat.css'
 import { useState, useEffect } from 'react';
-
+import {useNavigate} from 'react-router-dom';
 
 export default function Chat(){
+
+    const navigate = useNavigate();
 
     const [sidebarState, setSidebarState] = useState('flex');
     const [popupState, setPopupState] = useState('none');
@@ -18,6 +20,9 @@ export default function Chat(){
     const username = "Thelema Grannum";
 
     
+    const navigateHome = () => {
+        navigate('/');
+    }
 
     useEffect(() => {
 
@@ -28,17 +33,18 @@ export default function Chat(){
 
         */
 
-            document.addEventListener("click", () => {
-                setTimeout(closePopup, 3000);
+            document.querySelector(".sidebar")?.addEventListener("click", () => {
+                setTimeout(closePopup, 500);
             });
         
+
        
     }, [popupState]);
 
     function closePopup(){
         setPopupState('none');
     }
-    
+
     const chats = [
         {
             title: "How to make an omlet",
@@ -52,9 +58,7 @@ export default function Chat(){
         setMessages([...messages, {sender: "You", content: event.target[0].value}]);
         
     }
-    const createChat = () => {
-
-    }
+    
 
     const openSidebar = () =>{
         setSidebarState('flex')
@@ -90,7 +94,7 @@ export default function Chat(){
                   </div>
                   
                     <div className="popup" style={{'display': `${popupState}`}}>
-                        <span >Sign out</span>
+                        <span onClick={navigateHome} >Sign out</span>
                     </div>
 
                  
@@ -145,7 +149,7 @@ export default function Chat(){
                 </div>
                 
 
-                <button onSubmit={createChat}> 
+                <button onClick={closeSidebar}> 
                     <span className="button-icon">
 
                     </span>

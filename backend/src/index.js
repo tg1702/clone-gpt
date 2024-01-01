@@ -20,6 +20,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 
+app.get('/', (req, res) =>{
+  res.send("Testing");
+});
 /* User login */
 app.post('/api/login', async (req, res) => {
     // TODO: Load MongoDB to check if user is present in DB
@@ -33,8 +36,8 @@ app.post('/api/login', async (req, res) => {
 
         const passwordMatch = await bcrypt.compare(req.body.password, user.password);
 
-        
-        if (passwordMatch.length == 0) return res.status(500).send("Invalid email or password");
+
+        if (passwordMatch == false) return res.status(500).send({error : "Invalid email or password"});
 
         const token = jwt.sign({
           _id: user._id,
@@ -49,11 +52,12 @@ app.post('/api/login', async (req, res) => {
           expire: 7 * 24 * 60 * 60 * 100
 
 
-        }).status(200).send({ user_id: user._id});
+        }).status(200).send({ user_id : user._id.toString()});
+        
 
       } catch (e) {
         console.error("Error connecting to MongoDB: " + e);
-        res.status(200).send({error: e});
+        res.status(200).json({error: e});
     }
 
 });
@@ -69,6 +73,10 @@ app.post('/api/register', async (req, res) =>{
 
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
+        const prev = await Login.find({email: req.body.email});
+
+        if (prev) res.send({"error": "This email address is already registered"})
+        
     
         const new_user = new Login(
             {
