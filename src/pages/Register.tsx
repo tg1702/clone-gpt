@@ -12,6 +12,11 @@ export default function Login(){
         const email = event.target[1].value;
         const password = event.target[2].value;
 
+        const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+        const isValidEmail = emailRegex.test(email);
+
+        if (!isValidEmail) return;
+
         if (!name)
             return;
         if (!email)
@@ -45,9 +50,9 @@ export default function Login(){
             <div className="form-container">
                 <h1>Register</h1>
                 <form onSubmit={handleRegisterSubmit}>
-                    <input type="text" name="name" placeholder="Name"></input>
-                    <input type="email" name="email" placeholder="Email"></input>
-                    <input type="password" name="password" placeholder="Password"></input>
+                    <input type="text" name="name" placeholder="Name" required></input>
+                    <input type="email" name="email" placeholder="Email" required></input>
+                    <input type="password" name="password" placeholder="Password" required></input>
                     
                     <input type="submit" value="Submit" />
                 </form>

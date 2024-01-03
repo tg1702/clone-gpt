@@ -47,3 +47,10 @@ h1{
     border: none;
     cursor: pointer;
 }
+
+.warning-box{
+    display: none;
+    height: 3rem;
+    width: 50%;
+    background-color: rgb(232, 118, 118);
+}

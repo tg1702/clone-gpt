@@ -166,7 +166,7 @@ export default function Chat(){
                                 {chat.title}
                             </button>
                             
-                        </div>;
+                        </div>
                     })}
                 </div>
 

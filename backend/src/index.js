@@ -32,10 +32,13 @@ app.post('/api/login', async (req, res) => {
         const user = await Login.findOne({ name: req.body.name, email: req.body.email});
 
         
-        if (!user) res.send({"error": "You are not registered"})
+        console.log(user);
+
+        if (!user) return res.send({"error": "You are not registered"})
 
         const passwordMatch = await bcrypt.compare(req.body.password, user.password);
 
+        
 
         if (passwordMatch == false) return res.status(500).send({error : "Invalid email or password"});
 
@@ -52,12 +55,17 @@ app.post('/api/login', async (req, res) => {
           expire: 7 * 24 * 60 * 60 * 100
 
 
-        }).status(200).send({ user_id : user._id.toString()});
+        });
+        res.cookie('User ID', {user_id : user._id.toString(), username: user.name}, {
+          httpOnly: false,
+          expire: 7 * 24 * 60 * 60 * 100
+        })
+        res.status(200).send({ 'message': 'Login successful' });
         
 
       } catch (e) {
         console.error("Error connecting to MongoDB: " + e);
-        res.status(200).json({error: e});
+        res.status(200).json({error: e.toString()});
     }
 
 });
@@ -104,11 +112,17 @@ app.post('/api/register', async (req, res) =>{
           expire: 7 * 24 * 60 * 60 * 100
 
 
-        }).status(200).send({ message: "Registration successful"});
+        });
+
+        res.cookie('User', {user_id : user._id.toString(), username: new_user.name}, {
+          httpOnly: false,
+          expire: 7 * 24 * 60 * 60 * 100
+        })
+        res.status(200).send({ 'message': 'Login successful' });
 
       } catch (e) {
         console.error(e);
-        res.status(200).send({error: e});
+        res.status(200).send({error: e.toString()});
     }
 
 });

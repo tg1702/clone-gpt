@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import '../css/Login.css'
 
@@ -5,12 +6,21 @@ export default function Login(){
 
     const navigate = useNavigate();
 
+    const [warning, setWarning] = useState(false);
+
     const handleLoginSubmit = (event: any) => {
         event.preventDefault();
+
+        setWarning(false);
 
         const name = event.target[0].value;
         const email = event.target[1].value;
         const password = event.target[2].value;
+
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+$/i;
+        const isValidEmail = emailRegex.test(email);
+
+        if (!isValidEmail) displayWarningBox('An invalid email address was entered');
 
         if (!name)
             return;
@@ -30,8 +40,9 @@ export default function Login(){
         ).then( (res) => res.json()
         
         ).then((data) => {
+            console.log(data);
             if (data['error']){
-                console.log("An error has occurred: " + data["error"])
+                displayWarningBox(data["error"]);
             }
             else {
                 navigate('/chat');
@@ -41,6 +52,15 @@ export default function Login(){
 
         
         
+    }
+
+    const displayWarningBox = (text : string) => {
+        setWarning(true);
+        let warningBox = document.querySelector(".warning-box");
+
+        if (warningBox != null){
+            warningBox.innerHTML = text;
+        }
     }
 
     const navigateClose = () => {
@@ -56,12 +76,15 @@ export default function Login(){
             <div className="form-container">
                 <h1>Login</h1>
                 <form onSubmit={handleLoginSubmit}>
-                    <input type="text" name="name" placeholder="Name"></input>
-                    <input type="email" name="email" placeholder="Email"></input>
-                    <input type="password" name="password" placeholder="Password"></input>
+                    <input type="text" name="name" placeholder="Name" required></input>
+                    <input type="email" name="email" placeholder="Email" required></input>
+                    <input type="password" name="password" placeholder="Password" required></input>
                     
                     <input type="submit" value="Submit" />
                 </form>
+                <div className="warning-box" style={{'display': `${warning == true ? 'block' : 'none'}`}}>
+
+                </div>
                 <span>Don't have an account? <button onClick={() => navigate("/register")}>Register</button></span>
             </div>
         </div>
