@@ -5,20 +5,32 @@ import Cookies from 'js-cookie';
 
 export default function Chat(){
 
+    interface Messages{
+        sender: string;
+        content: string;
+    }
+    
+    interface Chats {
+        title: string;
+        messages: Messages[];
+        user_id: string;
+        _id: string;
+        timestamp: string;
+
+    }
+
     const navigate = useNavigate();
 
     const [sidebarState, setSidebarState] = useState('flex');
     const [popupState, setPopupState] = useState('none');
 
-    const [messages, setMessages] = useState( [
-        {sender: "You", content: "Hello"},
+    const [messages, setMessages] = useState<Messages[]>([]);
 
-        {sender: "Clone GPT",
-        content: "Hello Back"
-        }
-    ]);
+    
 
     const [username, setUsername] = useState("");
+    const [userId, setUserID] = useState("");
+    const [chats, setChats] = useState<Chats[]>([]);
 
     
     const navigateHome = () => {
@@ -31,8 +43,16 @@ export default function Chat(){
                 user = decodeURI(user.slice(2));
                 const verified_user = JSON.parse(user);
                 setUsername(verified_user.username);
+                setUserID(verified_user.user_id);
             }
             
+            console.log(username);
+            console.log(userId);
+
+            if (userId)
+                fetch(`api/users${userId}/chats`).then((res) => res.json()).then((data : Chats[]) =>{
+                    setChats([...data, ...chats]);
+            });
             
 
                document.querySelector(".sidebar")?.addEventListener("click", () => {
@@ -41,18 +61,16 @@ export default function Chat(){
         
 
        
-    }, [popupState]);
+    }, [popupState, username, userId]);
 
     function closePopup(){
         setPopupState('none');
     }
 
-    const chats = [
-        {
-            title: "How to make an omlet",
-            messages: messages,
-        }
-    ]
+    
+    const loadMessages = (chatMessages: Messages[]) => {
+        setMessages(chatMessages);
+    }
 
     async function sendToServer(event: any){
         event.preventDefault();
@@ -164,7 +182,7 @@ export default function Chat(){
                     <h3>Previous chats</h3>
                     {chats.map((chat, id) =>{
                         return <div className="chat-title" key={id}>
-                            <button>
+                            <button onClick={() => loadMessages(chat.messages)}>
                                 {chat.title}
                             </button>
                             

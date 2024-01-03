@@ -19,10 +19,19 @@ const schema = new Schema({
     type: String,
     required: true,
     max: 255
-  }
+  },
 
-  
-  
+  title: {
+    type: String,
+    required: true,
+    max: 255
+  },
+
+  timestamp: {
+    type: String,
+    required: true,
+    max: 255
+  }
 
 
   
