@@ -30,6 +30,7 @@ export default function Chat(){
 
     const [username, setUsername] = useState("");
     const [userId, setUserID] = useState("");
+    const [selectedChatId, setSelectedChatId] = useState("");
     const [chats, setChats] = useState<Chats[]>([]);
 
     
@@ -46,12 +47,11 @@ export default function Chat(){
                 setUserID(verified_user.user_id);
             }
             
-            console.log(username);
-            console.log(userId);
 
             if (userId)
                 fetch(`api/users${userId}/chats`).then((res) => res.json()).then((data : Chats[]) =>{
-                    setChats([...data, ...chats]);
+                    
+                        setChats([...data, ...chats]);
             });
             
 
@@ -68,14 +68,37 @@ export default function Chat(){
     }
 
     
-    const loadMessages = (chatMessages: Messages[]) => {
+    const loadMessages = (chatMessages: Messages[], chatId: string) => {
+        setSelectedChatId(chatId);
         setMessages(chatMessages);
     }
 
     async function sendToServer(event: any){
         event.preventDefault();
+        
+        
+        fetch(`/api/users${userId}/chats${selectedChatId}`, {
+            method: 'POST',
+            body: JSON.stringify({message:event.target[0].value}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+        }).then(
+            (res) => res.json()
+        ).then (
+            (data) => console.log(data)
+        );
 
-        setMessages([...messages, {sender: "You", content: event.target[0].value}]);
+        fetch(`/api/users${userId}/chats${selectedChatId}/generate`,
+            ).then(
+            (res) => res.json()
+        ).then(
+            (data : Messages) => {
+                
+                setMessages([...messages, {sender: "You", content: event.target[0].value}, {sender : "Clone GPT", content: data.content}]);      
+            }
+        );
         
     }
     
@@ -182,7 +205,7 @@ export default function Chat(){
                     <h3>Previous chats</h3>
                     {chats.map((chat, id) =>{
                         return <div className="chat-title" key={id}>
-                            <button onClick={() => loadMessages(chat.messages)}>
+                            <button onClick={() => loadMessages(chat.messages, chat._id)}>
                                 {chat.title}
                             </button>
                             

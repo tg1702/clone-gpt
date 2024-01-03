@@ -31,8 +31,6 @@ app.post('/api/login', async (req, res) => {
     
         const user = await Login.findOne({ name: req.body.name, email: req.body.email});
 
-        
-        console.log(user);
 
         if (!user) return res.send({"error": "You are not registered"})
 
@@ -146,7 +144,7 @@ app.get('/api/users:user_id/chats:chat_id', authenticateToken, async (req, res) 
     // TODO: obtain chats using mongoose
     try{
         await mongoose.connect(MONGO_URI);
-          const chat = await Chat.find({user_id: req.params.user_id, _id: req.params.chat_id});
+          const chat = await Chat.findOne({user_id: req.params.user_id, _id: req.params.chat_id});
         
           res.json(chat);
         } catch (e) {
@@ -155,19 +153,38 @@ app.get('/api/users:user_id/chats:chat_id', authenticateToken, async (req, res) 
         }
 });
 
-/* Return a generated message from Clone.GPT */
-app.get('/api/users:user_id/chats:chat_id', authenticateToken, async (req, res) => {
+app.post('/api/users:user_id/chats:chat_id', authenticateToken, async (req, res) => {
   // TODO: obtain chats using mongoose
   try{
       await mongoose.connect(MONGO_URI);
-        const chat = await Chat.find({user_id: req.params.user_id, _id: req.params.chat_id});
+        const chat = await Chat.findOne({user_id: req.params.user_id, _id: req.params.chat_id});
+      
+        
+        chat.messages.push({sender: "You", content: req.body.message});
+      
+        await chat.save();
+        res.json(chat);
+      } catch (e) {
+        console.error("Error connecting to MongoDB: " + e);
+        res.status(200).send({error: e});
+      }
+});
+
+/* Return a generated message from CloneGPT */
+app.get('/api/users:user_id/chats:chat_id/generate', authenticateToken, async (req, res) => {
+  // TODO: obtain chats using mongoose
+  try{
+      await mongoose.connect(MONGO_URI);
+        const chat = await Chat.findOne({user_id: req.params.user_id, _id: req.params.chat_id});
       
 
-        const reply = "";
-        chat.messages.push({sender: "Clone.GPT", receiver: "user", content: reply})
+        const reply = "Message";
+        chat.messages.push({sender: "CloneGPT",  content: reply})
 
         await chat.save();
 
+        
+        res.send({sender: "CloneGPT",  content: reply});
       } catch (e) {
         console.error("Error connecting to MongoDB: " + e);
         res.status(200).send({error: e});
@@ -182,9 +199,10 @@ app.post('/api/users:user_id/chats', authenticateToken, async (req, res) => {
       await mongoose.connect(MONGO_URI);
 
         const chat = new Chat({
+          title: req.body.title,
           user_id: req.params.user_id,
           messages: req.body.messages,
-
+          timestamp: req.body.timestamp
         });
 
         await chat.save();
