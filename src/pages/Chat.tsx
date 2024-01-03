@@ -1,6 +1,7 @@
-import '../css/Chat.css'
+import '../css/Chat.css';
 import { useState, useEffect } from 'react';
 import {useNavigate} from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 export default function Chat(){
 
@@ -17,7 +18,7 @@ export default function Chat(){
         }
     ]);
 
-    const username = "Thelema Grannum";
+    const [username, setUsername] = useState("");
 
     
     const navigateHome = () => {
@@ -25,15 +26,16 @@ export default function Chat(){
     }
 
     useEffect(() => {
+            let user = Cookies.get("User ID");
+            if (user != null){
+                user = decodeURI(user.slice(2));
+                const verified_user = JSON.parse(user);
+                setUsername(verified_user.username);
+            }
+            
+            
 
-        /*
-        fetch("api/users/")
-        .then((response) => response.json())
-        .then((data) => setMessages(data));
-
-        */
-
-            document.querySelector(".sidebar")?.addEventListener("click", () => {
+               document.querySelector(".sidebar")?.addEventListener("click", () => {
                 setTimeout(closePopup, 500);
             });
         
