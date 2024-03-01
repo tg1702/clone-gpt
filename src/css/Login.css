@@ -52,5 +52,6 @@ h1{
     display: none;
     height: 3rem;
     width: 50%;
+    text-align: center;
     background-color: rgb(232, 118, 118);
 }

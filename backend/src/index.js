@@ -6,6 +6,7 @@ import bcrypt from 'bcryptjs';
 import  jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import {GoogleGenerativeAI}  from '@google/generative-ai';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ const PORT = process.env["PORT"];
 const MONGO_URI = process.env["MONGO_URI"];
 const JWT_SECRET = process.env["JWT_SECRET"];
 
+const GOOGLE_API_KEY=process.env["GEMINI_API_KEY"];
 
 app.use(express.json());
 app.use(cookieParser());
@@ -177,8 +179,23 @@ app.get('/api/users:user_id/chats:chat_id/generate', authenticateToken, async (r
       await mongoose.connect(MONGO_URI);
         const chat = await Chat.findOne({user_id: req.params.user_id, _id: req.params.chat_id});
       
+        const lastMessage = chat.messages[chat.messages.length-1].content;
+        let context = "";
+        for (let i=0; i < chat.messages.length-1; i++){
+          context += "Sender: " + chat.messages[i].sender + "\n";
+          context += "Message content: " + chat.messages[i].content + "\n";
+        }
+        const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-pro"});
 
-        const reply = "Message";
+        const prompt = "Reply to the request: " + lastMessage + "." + "Here is the context of the previous conversation with this user: " + context +". The sender 'Clone GPT' is you and the sender 'You' is the current user you are conversing with";
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const reply = response.text();
+
+        console.log(response.text());
+
         chat.messages.push({sender: "CloneGPT",  content: reply})
 
         await chat.save();
@@ -186,7 +203,7 @@ app.get('/api/users:user_id/chats:chat_id/generate', authenticateToken, async (r
         
         res.send({sender: "CloneGPT",  content: reply});
       } catch (e) {
-        console.error("Error connecting to MongoDB: " + e);
+        console.error(e);
         res.status(200).send({error: e});
       }
 });
