@@ -111,7 +111,7 @@ export default function Chat(){
                   },
             }).then(
                 (res) => res.json()
-            ).then ((data) => {
+            ).then (() => {
                 fetch(`/api/users${userId}/chats${selectedChatId}/generate`,
                 ).then(
                 (res) => res.json()
