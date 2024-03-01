@@ -44,7 +44,7 @@ export default function Home () {
           <div className="description-container">
 
           <div className="description-text">
-            Clone GPT is an (almost) identical replica of OpenAI's Chat GPT. Clone GPT was built uusing the MERN stack along with the OpenAI API to generate responses from the GPT-3.5 model
+            Clone GPT is a web application heavily inspired by OpenAI's Chat GPT. Clone GPT was built using the MERN stack along with the Google AI API to generate responses. Create your own personalized chats by registering now!
           </div>
           <div className="description-image">
             <img src="./src/assets/description-img.jpg" >
@@ -67,8 +67,8 @@ export default function Home () {
             </span>
 
             <span>
-              Source Code: <a href="">
-              insert_github_link
+              Source Code: <a href="https://github.com/tg1702/clone-gpt">
+              View on GitHub
               </a>
             </span>
           </div>
