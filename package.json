@@ -37,5 +37,5 @@
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
   },
-  "proxy": "http://localhost:5000"
+  "proxy": "https://clone-gpt-api.onrender.com"
 }
