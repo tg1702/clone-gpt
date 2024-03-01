@@ -134,7 +134,7 @@ app.get('/api/users:user_id/chats', authenticateToken, async (req, res) => {
     await mongoose.connect(MONGO_URI);
      
       const list = await Chat.find({user_id: req.params.user_id});
-      res.send(list);
+      res.send(list.reverse());
     } catch (e) {
       console.error("Error connecting to MongoDB: " + e);
       res.status(200).send({error: e});

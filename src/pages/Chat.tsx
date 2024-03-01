@@ -163,6 +163,7 @@ export default function Chat(){
                   </div>
 
                   <div className="user-info">
+                    
                     <span className="username">
                   {username}
                     </span>
@@ -186,7 +187,13 @@ export default function Chat(){
                           {msg.sender}
                       </div>
                       <div className="sender-body">
-                          {msg.content}
+                      
+                      <pre style={{whiteSpace: "pre-wrap"}}>
+                      {msg.content}   
+                    </pre>
+                      
+                      
+                          
                       </div>
                       <hr></hr>
                     </div>
