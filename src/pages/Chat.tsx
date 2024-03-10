@@ -70,65 +70,79 @@ export default function Chat(){
     
     const loadMessages = (chatMessages: Messages[], chatId: string) => {
         setSelectedChatId(chatId);
+        console.log(selectedChatId);
         setMessages(chatMessages);
     }
 
-    async function sendToServer(event: any){
+    function sendToServer(event: any){
         event.preventDefault();
+            
+        const val = event.target[0].value;
         
-        if (selectedChatId == ""){
-            fetch(`/api/users${userId}/chats`, {
-                method: 'POST',
-                body: JSON.stringify({
-                    title: 'New Chat',
-                    messages: event.target[0].value,
-                    user_id: userId,
-                    timestamp: "2024-01-04" + Date.now()
-                }),
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                  },
-            }).then(
-                (res) => res.json()
-            ).then (
-                (data) => {
-                  
-                    setSelectedChatId(data.chat_id);
-
-                }
-            );
+        if (event.target[0].value != null){
+            if (selectedChatId==""){
+                fetch(`/api/users${userId}/chats`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        title: 'New Chat',
+                        messages: [],
+                        user_id: userId,
+                        timestamp: "2024-01-04" + Date.now()
+                    }),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                      },
+                }).then(
+                    (res) => res.json()
+                ).then (
+                    (data) => {
+                        setSelectedChatId(data.chat_id);
+                    }
+                      
+                        
     
-        }
-
-        else{
-            fetch(`/api/users${userId}/chats${selectedChatId}`, {
-                method: 'POST',
-                body: JSON.stringify({message:event.target[0].value}),
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                  },
-            }).then(
-                (res) => res.json()
-            ).then (() => {
-                fetch(`/api/users${userId}/chats${selectedChatId}/generate`,
-                ).then(
-                (res) => res.json()
-            ).then(
-                (data : Messages) => {
                     
-                    setMessages([...messages, {sender: "You", content: event.target[0].value}, {sender : "Clone GPT", content: data.content}]);   
-                    console.log(data.content);   
-                }
-            );
+                );     
             }
+           
+            
+            if (selectedChatId!= ""){
+                fetch(`/api/users${userId}/chats${selectedChatId}`, {
+                    method: 'POST',
+                    body: JSON.stringify({sender: "You", content: val}),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                      },
+                }).then(
+                    (res) => res.json()
+                ).then (() => {
                     
-    
-                
-            );
-    
+                    fetch(`/api/users${userId}/chats${selectedChatId}/generate`,
+                    ).then(
+                    (res) => res.json()
+                ).then(
+                    (data : Messages) => {
+                        
+                        setMessages([...messages,  {sender: "You", content: val} , {sender : "Clone GPT", content: data.content}]);   
+                        console.log(data.content);   
+                    }
+                );
+                }
+                        
+        
+                    
+                );
+        
+            }   
+            
         }
+
+            
+            
+           
+        
 
         
         

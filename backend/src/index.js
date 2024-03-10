@@ -162,7 +162,7 @@ app.post('/api/users:user_id/chats:chat_id', authenticateToken, async (req, res)
         const chat = await Chat.findOne({user_id: req.params.user_id, _id: req.params.chat_id});
       
         
-        chat.messages.push({sender: "You", content: req.body.message});
+        chat.messages.push({sender: "You", content: req.body.content});
       
         await chat.save();
         res.json(chat);
@@ -188,13 +188,20 @@ app.get('/api/users:user_id/chats:chat_id/generate', authenticateToken, async (r
         const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-pro"});
 
-        const prompt = "Reply to the request: " + lastMessage + "." + "Here is the context of the previous conversation with this user: " + context +". The sender 'Clone GPT' is you and the sender 'You' is the current user you are conversing with";
+        let prompt = "";
+
+        if (context != "")
+          prompt = "Reply to the request: " + lastMessage + "." + "Here is the context of the previous conversation with this user: " + context +". If you cannot understand the context given simply ignore it and reply to the request as given. Note that the sender 'Clone GPT' is you and the sender 'You' is the current user you are conversing with";
+        else
+          prompt = "Reply to the request: " + lastMessage + ".";
+
+        
 
         const result = await model.generateContent(prompt);
         const response = await result.response;
         const reply = response.text();
 
-        console.log(response.text());
+        
 
         chat.messages.push({sender: "CloneGPT",  content: reply})
 
@@ -221,6 +228,8 @@ app.post('/api/users:user_id/chats', authenticateToken, async (req, res) => {
           messages: req.body.messages,
           timestamp: req.body.timestamp
         });
+
+        console.log(chat);
 
         await chat.save();
         res.send({chat_id: chat._id});
